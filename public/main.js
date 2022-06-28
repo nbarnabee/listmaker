@@ -19,6 +19,11 @@ function displayLists() {
     let listName = document.createElement("ul");
     listName.textContent = key;
     listDisplay.appendChild(listName);
+    masterList[key].forEach((a) => {
+      let listItem = document.createElement("li");
+      listItem.textContent = a;
+      listName.appendChild(listItem);
+    });
   }
 }
 
@@ -27,6 +32,7 @@ function addList() {
   console.log(listName);
   masterList[listName] = [];
   console.log(`List ${listName} added`);
+  document.querySelector(".new-list").value = "";
 }
 
 function addItem() {
