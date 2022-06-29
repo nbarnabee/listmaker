@@ -9,25 +9,26 @@
   </head>
   <body>
     <main>
-      <h1>Listmaker</h1>
+      <header>
+        <h1>My Lists</h1>
+        <section class="new-list">
+          <h3>Create New List</h3>
+          <label for="new-list">
+          <input type="text" id="new-list" class="new-list" placeholder="List name"/></label>
+          <button type="button" class="make-list"">Create</button>
+        </section>
+      </header>
 
       <section>
-        <h2>My Lists</h2>
         <div class="list-container"></div>
-        <button type="button" class="show-lists">Show Lists</button>
       </section>
-      <section>
-        <h2>Make New List</h2>
-          <input type="text" placeholder="Enter list name" class="new-list" />
-          <button type="button" class="make-list"">Make List</button>
-      </section>
-      <section>
-        <h2>Add to List</h2>
-        <input type="text" placeholder="List name" class="select-list" />
-        <input type="text" placeholder="New item" class="new-item" />
-        <button type="button" class="add-item">Add item</button>
-        <button type="button" class="save-list">Save</button>
-      </section>
+        <section class="input-container">
+          <h3>Add to List</h3>
+          <input type="text" placeholder="List name" class="select-list" />
+          <input type="text" placeholder="New item" class="new-item" />
+          <button type="button" class="add-item">Add item</button>
+        </section>
+
     </main>
     <script src="./public/main.js"></script>
   </body>
