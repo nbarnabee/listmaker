@@ -1,3 +1,10 @@
+/* -- General -- */
+
+button {
+  cursor: pointer;
+  margin-top: 10px;
+}
+
 header {
   margin: 2rem;
   display: grid;
@@ -12,6 +19,10 @@ h3 {
 
 .new-list {
   grid-area: search;
+}
+
+.new-list label {
+  font-size: 1.2rem;
 }
 
 .list-container {
