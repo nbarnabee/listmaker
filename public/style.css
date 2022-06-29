@@ -5,6 +5,12 @@ button {
   margin-top: 10px;
 }
 
+label {
+  font-size: 1.2rem;
+}
+
+/* --- Layout ----- */
+
 header {
   margin: 2rem;
   display: grid;
@@ -21,10 +27,6 @@ h3 {
   grid-area: search;
 }
 
-.new-list label {
-  font-size: 1.2rem;
-}
-
 .list-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -37,4 +39,13 @@ h3 {
 
 .input-container {
   margin-inline: 1rem;
+}
+
+.item-input-div {
+  margin-top: 3rem;
+}
+
+.delete-btn {
+  display: block;
+  margin-top: 3rem;
 }
