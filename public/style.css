@@ -1,0 +1,29 @@
+header {
+  margin: 2rem;
+  display: grid;
+  grid-template-columns: 25fr 1fr;
+  grid-template-areas: "title search";
+  justify-items: center;
+}
+
+h3 {
+  grid-area: title;
+}
+
+.new-list {
+  grid-area: search;
+}
+
+.list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 2rem;
+  min-height: 200px;
+  margin-bottom: 2rem;
+  margin-inline: auto;
+  width: 90%;
+}
+
+.input-container {
+  margin-inline: 1rem;
+}
