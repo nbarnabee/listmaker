@@ -9,6 +9,10 @@ label {
   font-size: 1.2rem;
 }
 
+input {
+  display: block;
+}
+
 /* --- Layout ----- */
 
 header {
