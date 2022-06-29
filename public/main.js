@@ -1,28 +1,52 @@
-document.querySelector(".show-lists").addEventListener("click", displayLists);
 document.querySelector(".make-list").addEventListener("click", addList);
 document.querySelector(".add-item").addEventListener("click", addItem);
-document.querySelector(".save-list").addEventListener("click", saveList);
 
 let listDisplay = document.querySelector(".list-container");
-let masterList = {};
+let masterList;
 
-window.onLoad = function () {
-  if (localStorage.getItem("savedListObj") !== null) {
-    masterList = JSON.parse(localStorage.getItem("savedListObj"));
-    console.log(`List loaded: ${masterList}`);
-  } else console.log("No list data found");
-};
+if (localStorage.getItem("savedListObj") !== null) {
+  masterList = JSON.parse(localStorage.getItem("savedListObj"));
+  console.log("List loaded");
+  displayLists();
+} else {
+  masterList = {};
+  console.log("No list data found");
+}
+
+/* For each key:value pair in the masterList, this creates a "list" element (a div containing a title and a ul) 
+Then it adds the */
 
 function displayLists() {
   listDisplay.innerHTML = "";
   for (let key in masterList) {
-    let listName = document.createElement("ul");
+    let listDiv = document.createElement("div");
+    listDiv.classList.add("list-div");
+    listDisplay.appendChild(listDiv);
+    let listName = document.createElement("h2");
     listName.textContent = key;
-    listDisplay.appendChild(listName);
+    listDiv.appendChild(listName);
+    let listUL = document.createElement("ul");
+    listDiv.appendChild(listUL);
+    let deleteBtn = document.createElement("button");
+    deleteBtn.setAttribute("type", "button");
+    deleteBtn.value = key;
+    deleteBtn.textContent = "Delete List";
+    deleteBtn.addEventListener("click", deleteList);
+    listDiv.appendChild(deleteBtn);
     masterList[key].forEach((a) => {
+      /* It seems I am having to go about this in a wonky way, all for the sake of these damnable buttons. */
       let listItem = document.createElement("li");
-      listItem.textContent = a;
-      listName.appendChild(listItem);
+      listUL.appendChild(listItem);
+      let listItemName = document.createElement("span");
+      listItemName.textContent = a;
+      listItem.appendChild(listItemName);
+      let deleteListItem = document.createElement("button");
+      deleteListItem.setAttribute("type", "button");
+      deleteListItem.name = [key];
+      deleteListItem.value = a;
+      deleteListItem.innerText = "X";
+      deleteListItem.addEventListener("click", deleteItem);
+      listItemName.appendChild(deleteListItem);
     });
   }
 }
@@ -33,16 +57,37 @@ function addList() {
   masterList[listName] = [];
   console.log(`List ${listName} added`);
   document.querySelector(".new-list").value = "";
+  displayLists();
+  saveList();
 }
 
 function addItem() {
   let listName = document.querySelector(".select-list").value;
   let newItem = document.querySelector(".new-item").value;
-  if (masterList.hasOwnProperty(listName)) masterList[listName].push(newItem);
-  else alert("Error: no such list");
+  if (masterList.hasOwnProperty(listName)) {
+    masterList[listName].push(newItem);
+    displayLists();
+    saveList();
+    document.querySelector(".new-item").value = "";
+  } else alert("Error: no such list");
 }
 
 function saveList() {
   let savedListObj = JSON.stringify(masterList);
   localStorage.setItem("savedListObj", savedListObj);
+}
+
+function deleteList(e) {
+  let key = e.target.value;
+  delete masterList[key];
+  displayLists();
+  saveList();
+}
+
+function deleteItem(e) {
+  let list = e.target.name;
+  let item = e.target.value;
+  masterList[list] = masterList[list].filter((a) => a !== item);
+  displayLists();
+  saveList();
 }
