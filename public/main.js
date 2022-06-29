@@ -1,5 +1,4 @@
 document.querySelector(".make-list").addEventListener("click", addList);
-document.querySelector(".add-item").addEventListener("click", addItem);
 
 let listDisplay = document.querySelector(".list-container");
 let masterList;
@@ -13,11 +12,25 @@ if (localStorage.getItem("savedListObj") !== null) {
   console.log("No list data found");
 }
 
-/* For each key:value pair in the masterList, this creates a "list" element (a div containing a title and a ul) 
-Then it adds the */
+/* For each key:value group in the masterList, this creates a "list" element.  This code is a mess, but the final structure looks like:
+<div>
+  <h2>
+  <ul>
+    <li>....
+  </ul>
+  <div>
+    <label>
+      <input>
+    </label>
+    <button>
+  </div>
+  <button>
+</div>
+*/
 
 function displayLists() {
-  listDisplay.innerHTML = "";
+  listDisplay.textContent = "";
+  document.getElementById("new-list").value = "";
   for (let key in masterList) {
     let listDiv = document.createElement("div");
     listDiv.classList.add("list-div");
@@ -27,8 +40,25 @@ function displayLists() {
     listDiv.appendChild(listName);
     let listUL = document.createElement("ul");
     listDiv.appendChild(listUL);
+    let itemInputDiv = document.createElement("div");
+    itemInputDiv.classList.add("item-input-div");
+    listDiv.appendChild(itemInputDiv);
+    let itemInputLabel = document.createElement("label");
+    itemInputLabel.textContent = "Add to list";
+    itemInputDiv.appendChild(itemInputLabel);
+    let itemInput = document.createElement("input");
+    itemInput.classList.add("new-item");
+    itemInput.setAttribute("type", "text");
+    itemInputLabel.appendChild(itemInput);
+    let addBtn = document.createElement("button");
+    addBtn.setAttribute("type", "button");
+    addBtn.value = key;
+    addBtn.textContent = "Add item";
+    addBtn.addEventListener("click", addListItem);
+    itemInputDiv.appendChild(addBtn);
     let deleteBtn = document.createElement("button");
     deleteBtn.setAttribute("type", "button");
+    deleteBtn.classList.add("delete-btn");
     deleteBtn.value = key;
     deleteBtn.textContent = "Delete List";
     deleteBtn.addEventListener("click", deleteList);
@@ -52,24 +82,20 @@ function displayLists() {
 }
 
 function addList() {
-  let listName = document.querySelector(".new-list").value;
+  let listName = document.getElementById("new-list").value;
   console.log(listName);
   masterList[listName] = [];
   console.log(`List ${listName} added`);
-  document.querySelector(".new-list").value = "";
   displayLists();
   saveList();
 }
 
-function addItem() {
-  let listName = document.querySelector(".select-list").value;
+function addListItem(e) {
+  let listName = e.target.value;
   let newItem = document.querySelector(".new-item").value;
-  if (masterList.hasOwnProperty(listName)) {
-    masterList[listName].push(newItem);
-    displayLists();
-    saveList();
-    document.querySelector(".new-item").value = "";
-  } else alert("Error: no such list");
+  masterList[listName].push(newItem);
+  displayLists();
+  saveList();
 }
 
 function saveList() {
@@ -79,9 +105,11 @@ function saveList() {
 
 function deleteList(e) {
   let key = e.target.value;
-  delete masterList[key];
-  displayLists();
-  saveList();
+  if (confirm(`Are you sure you want to delete "${key}"?`)) {
+    delete masterList[key];
+    displayLists();
+    saveList();
+  } else return;
 }
 
 function deleteItem(e) {
