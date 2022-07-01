@@ -18,13 +18,8 @@ if (localStorage.getItem("savedListObj") !== null) {
   <ul>
     <li>....
   </ul>
-  <div>
-    <label>
-      <input>
-    </label>
-    <button>
-  </div>
-  <button>
+  <edit button>
+  <delete button>
 </div>
 */
 
@@ -40,22 +35,20 @@ function displayLists() {
     listDiv.appendChild(listName);
     let listUL = document.createElement("ul");
     listDiv.appendChild(listUL);
-    let itemInputDiv = document.createElement("div");
-    itemInputDiv.classList.add("item-input-div");
-    listDiv.appendChild(itemInputDiv);
-    let itemInputLabel = document.createElement("label");
-    itemInputLabel.textContent = "Add to list";
-    itemInputDiv.appendChild(itemInputLabel);
-    let itemInput = document.createElement("input");
-    itemInput.classList.add("new-item");
-    itemInput.setAttribute("type", "text");
-    itemInputLabel.appendChild(itemInput);
-    let addBtn = document.createElement("button");
-    addBtn.setAttribute("type", "button");
-    addBtn.value = key;
-    addBtn.textContent = "Add item";
-    addBtn.addEventListener("click", addListItem);
-    itemInputDiv.appendChild(addBtn);
+    let editBtn = document.createElement("button");
+    editBtn.setAttribute("type", "button");
+    editBtn.classList.add("edit-btn");
+    editBtn.value = key;
+    editBtn.textContent = "Edit List";
+    editBtn.addEventListener("click", editList);
+    listDiv.appendChild(editBtn);
+    let saveBtn = document.createElement("button");
+    saveBtn.setAttribute("type", "button");
+    saveBtn.classList.add("save-btn");
+    saveBtn.value = key;
+    saveBtn.textContent = "Save changes";
+    saveBtn.addEventListener("click", saveListPostEdit);
+    listDiv.appendChild(saveBtn);
     let deleteBtn = document.createElement("button");
     deleteBtn.setAttribute("type", "button");
     deleteBtn.classList.add("delete-btn");
@@ -64,19 +57,11 @@ function displayLists() {
     deleteBtn.addEventListener("click", deleteList);
     listDiv.appendChild(deleteBtn);
     masterList[key].forEach((a) => {
-      /* It seems I am having to go about this in a wonky way, all for the sake of these damnable buttons. */
       let listItem = document.createElement("li");
       listUL.appendChild(listItem);
       let listItemName = document.createElement("span");
       listItemName.textContent = a;
       listItem.appendChild(listItemName);
-      let deleteListItem = document.createElement("button");
-      deleteListItem.setAttribute("type", "button");
-      deleteListItem.name = [key];
-      deleteListItem.value = a;
-      deleteListItem.innerText = "X";
-      deleteListItem.addEventListener("click", deleteItem);
-      listItemName.appendChild(deleteListItem);
     });
   }
 }
@@ -88,6 +73,48 @@ function addList() {
   displayLists();
   saveList();
 }
+
+function editList(e) {
+  console.log(e.target.parentNode);
+  let key = e.target.value;
+  let list = e.target.parentNode.childNodes[1];
+  let listItems = Array.from(list.childNodes);
+  listItems.forEach((a) => {
+    let deleteListItem = document.createElement("button");
+    deleteListItem.setAttribute("type", "button");
+    deleteListItem.name = key;
+    deleteListItem.value = a.innerText;
+    deleteListItem.innerText = "X";
+    deleteListItem.addEventListener("click", deleteItem);
+    a.appendChild(deleteListItem);
+  });
+}
+
+function saveListPostEdit(e) {
+  console.log("boo");
+}
+
+// add a delete button to each list item
+// add a "close editor button" that removes the buttons that are added
+// add an "add item" input bar to the bottom of the list, and be sure that it's tied somehow to the value of the list that it's attached to
+// let itemInputDiv = document.createElement("div");
+// itemInputDiv.classList.add("item-input-div");
+// listDiv.appendChild(itemInputDiv);
+// let itemInputLabel = document.createElement("label");
+// itemInputLabel.textContent = "Add to list";
+// itemInputDiv.appendChild(itemInputLabel);
+// let itemInput = document.createElement("input");
+// itemInput.classList.add("new-item");
+// itemInput.setAttribute("type", "text");
+// itemInputLabel.appendChild(itemInput);
+// let addBtn = document.createElement("button");
+// addBtn.setAttribute("type", "button");
+// addBtn.value = key;
+// addBtn.textContent = "Add item";
+// addBtn.addEventListener("click", addListItem);
+// itemInputDiv.appendChild(addBtn);
+
+// // Here the delete buttons
 
 function addListItem(e) {
   let listName = e.target.value;
@@ -114,7 +141,9 @@ function deleteList(e) {
 function deleteItem(e) {
   let list = e.target.name;
   let item = e.target.value;
-  masterList[list] = masterList[list].filter((a) => a !== item);
-  displayLists();
-  saveList();
+  console.log(e.target);
+  e.target.parentNode.style.textDecoration = "line-through";
+  // masterList[list] = masterList[list].filter((a) => a !== item);
+  // displayLists();
+  // saveList();
 }
