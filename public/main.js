@@ -12,7 +12,7 @@ if (localStorage.getItem("savedListObj") !== null) {
   console.log("No list data found");
 }
 
-/* For each key:value group in the masterList, this creates a "list" element.  This code is a mess, but the final structure looks like:
+/* This creates a "list" div for each key:value group in the masterList.  This code is a mess, but the final structure looks like:
 <div>
   <h2>
   <ul>
@@ -83,7 +83,6 @@ function displayLists() {
 
 function addList() {
   let listName = document.getElementById("new-list").value;
-  console.log(listName);
   masterList[listName] = [];
   console.log(`List ${listName} added`);
   displayLists();
